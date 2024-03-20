@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hamburger } from "../../assets/icons";
 import { headerLogo } from "../../assets/images";
 import { navLinks } from "../../constants";
 
 const Nav = () => {
   const [showDrawer, setShowDrawer] = useState(false);
+  const sideNavRef = useRef();
 
   return (
     <header className="padding-x py-8 absolute z-10 w-full">
@@ -42,20 +43,35 @@ const Nav = () => {
           <img src={hamburger} alt="hamburger icon" width={25} height={25} />
         </div>
       </nav>
-      {showDrawer && (
-        <ul className="float-end">
+      <div
+        className={`sidenav h-full fixed z-10 top-0 right-0 bg-slate-500 pt-16 transition-all duration-300 ease-in-out ${
+          showDrawer ? "w-64" : "w-0"
+        }`}
+        ref={sideNavRef}
+      >
+        <a
+          className={
+            showDrawer
+              ? `absolute top-5 right-10 text-3xl text-white hover:text-slate-300 font-montserrat cursor-pointer transition-all duration-300 ease-in-out`
+              : `hidden`
+          }
+          onClick={() => setShowDrawer(!showDrawer)}
+        >
+          &times;
+        </a>
+        <ul>
           {navLinks.map((item) => (
             <li key={item.id}>
               <a
                 href={item.href}
-                className="block py-2 px-4 text-lg text-gray-900 hover:bg-gray-100"
+                className="flex py-2 px-6 max-md:px-10 text-lg text-white hover:text-slate-300 font-montserrat"
               >
                 {item.label}
               </a>
             </li>
           ))}
         </ul>
-      )}
+      </div>
     </header>
   );
 };
